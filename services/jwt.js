@@ -26,6 +26,6 @@ exports.createRefreshToken = function(user) {
     return jwt.encode(payload, SECRET_KEY);
 };
 
-exports.decoreToken = function(token) {
+exports.decodedToken = function(token) {
     return jwt.decode(token, SECRET_KEY, true);
 }
