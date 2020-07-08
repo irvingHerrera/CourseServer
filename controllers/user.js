@@ -159,9 +159,22 @@ function getAvatar(req, res) {
     });
 }
 
-function updateUser(req, res) {
+async function updateUser(req, res) {
     const userData = req.body;
+    userData.email = req.body.email.toLowerCase();
     const params = req.params;
+
+    if(userData.password) {
+        await bcrypt.hash(userData.password, null, null, (err, hash) => {
+            if(err) {
+                res.status(500).send({
+                    message: 'Error al encriptar la contraseña.'
+                })
+            } else {
+                userData.password = hash;
+            }
+        });
+    }
 
     User.findByIdAndUpdate({ _id: params.id }, userData, (err, userData) => {
         if(err) {
@@ -177,6 +190,23 @@ function updateUser(req, res) {
     });
 }
 
+function activateUser(req, res) {
+    const { id } = req.params;
+    const { active } = req.body;
+
+    User.findByIdAndUpdate(id, { active }, (err, userStored) => {
+        if(err) {
+            res.status(500).send({ message: 'Error del servidor'});
+        } else {
+            if(!userStored) {
+                res.status(500).send({ message: 'No se ha encontrado el usuario'});
+            } else {
+                res.status(200).send({ message: `Usuario ${active === true ? 'activado' : 'desactivado'} correctamente`});
+            }
+        }
+    })
+}
+
 module.exports = {
     signUp,
     signIn,
@@ -184,5 +214,6 @@ module.exports = {
     getUsersActive,
     uploadAvatar,
     getAvatar,
-    updateUser
+    updateUser,
+    activateUser
 };
