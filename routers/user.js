@@ -16,5 +16,6 @@ api.get('/getavatar/:avatarName', UserController.getAvatar);
 api.put('/updateUser/:id', [md_auth.ensureAuth], UserController.updateUser);
 api.put('/activateuser/:id', [md_auth.ensureAuth], UserController.activateUser);
 api.delete('/deleteUser/:id', [md_auth.ensureAuth], UserController.deleteUser);
+api.post('/singUpAdmin', [md_auth.ensureAuth], UserController.singUpAdmin);
 
 module.exports = api; 

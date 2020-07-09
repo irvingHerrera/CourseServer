@@ -223,6 +223,44 @@ function deleteUser(req, res) {
     });
 }
 
+function singUpAdmin(req, res) {
+    const user = new User();
+
+    const { name, lastname, email, role, password } = req.body;
+    user.name = name;
+    user.lastname = lastname;
+    user.email = email.toLowerCase();
+    user.role = role;
+    user.active = true;
+
+    if(!password) {
+        res.status(500).send({ message: 'La contraseña es obligatoria.' });
+    } else {
+        bcrypt.hash(password, null, null, (err, hash) => {
+            if(err) {
+                res.status(500).send({ message: 'Error al encriptar la contraseña.' });
+            } else {
+                user.password = hash;
+                user.save((err, userStore) => {
+                    if(err) {
+                        res.status(500).send({ message: 'El usuario ya existe.'});
+                    } else {
+                        if(!userStore) {
+                            res.status(500).send({ message: 'Error la crear el nuevo usuario'});
+                        } else {
+                            userStore.password = '';
+                            res.status(200).send({ message: 'Usuario creado correctamente.' });
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    
+    
+}
+
 module.exports = {
     signUp,
     signIn,
@@ -232,5 +270,6 @@ module.exports = {
     getAvatar,
     updateUser,
     activateUser,
-    deleteUser
+    deleteUser,
+    singUpAdmin
 };
