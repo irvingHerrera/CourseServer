@@ -22,13 +22,19 @@ function addMenu(req, res) {
 }
 
 function getMenu(req, res) {
-    Menu.find().then(menus => {
-        if(!menus) {
-            res.status(404).send({ message: 'No se han encontrado los menus' })
+    Menu.find()
+    .sort({ order: 'asc' })
+    .exec((err, menus) => {
+        if(err) {
+            res.status(500).send({ message: 'Error del servidor' })
         } else {
-            res.status(200).send({ menus });
+            if(!menus) {
+                res.status(404).send({ message: 'No se han encontrado los menus' })
+            } else {
+                res.status(200).send({ menus });
+            }
         }
-    })
+    });
     
 }
 
