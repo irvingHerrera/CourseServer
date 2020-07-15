@@ -8,5 +8,6 @@ const api = express.Router();
 api.post('/addmenu', [md_auth.ensureAuth], MenuController.addMenu);
 api.get('/getMenu', MenuController.getMenu);
 api.put('/updateMenu/:id', [md_auth.ensureAuth], MenuController.updateMenu);
+api.put('/activateMenu/:id', [md_auth.ensureAuth], MenuController.activateMenu);
 
 module.exports = api; 
