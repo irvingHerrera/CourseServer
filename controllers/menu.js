@@ -72,9 +72,27 @@ function activateMenu(req, res) {
     });
 }
 
+function deleteMenu(req, res) {
+    const { id } = req.params;
+
+    Menu.findByIdAndRemove(id, (err, menuDeteled) => {
+        if(err) {
+            res.status(500).send({ message: 'Error del servidor.', err });
+        } else {
+            if(!menuDeteled) {
+                res.status(404).send({ message: 'Menu no encontrado.' });
+            } else {
+                res.status(200).send({ message: 'El menu ha sido eliminado correctamente.' });
+            }
+        }
+    });
+}
+
+
 module.exports = {
     addMenu,
     getMenu,
     updateMenu,
-    activateMenu
+    activateMenu,
+    deleteMenu
 };
