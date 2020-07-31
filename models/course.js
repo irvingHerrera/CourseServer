@@ -4,7 +4,8 @@ const Schema = mongoose.Schema;
 const CoruseSchema = Schema({
     idCourse: {
         type: Number,
-        unique: true
+        unique: true,
+        require: true
     },
     link: String,
     cuopon: String,
