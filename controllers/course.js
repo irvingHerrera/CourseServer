@@ -18,6 +18,23 @@ function addCourse(req, res) {
     });
 }
 
+function getCourse(req, res) {
+    Course.find()
+        .sort({ order: 'asc' })
+        .exec((err, coursesStore) => {
+            if(err) {
+                res.status(500).send({ code: 500, message: 'Error del servidor' });
+            } else {
+                if(!coursesStore) {
+                    res.status(404).send({ code: 404, message: 'No se ha encontrado ningun curso' });
+                } else {
+                    res.status(200).send({ code: 200, courses: coursesStore });
+                }
+            }
+        });
+}
+
 module.exports = {
-    addCourse
+    addCourse,
+    getCourse
 }
