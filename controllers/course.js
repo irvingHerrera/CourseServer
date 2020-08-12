@@ -34,7 +34,24 @@ function getCourse(req, res) {
         });
 }
 
+function deleteCourse(req, res) {
+    const { id } = req.params;
+
+    Course.findByIdAndRemove(id, (err, courseDelete) => {
+        if(err) {
+            res.status(500).send({ code: 500, message: 'Error del servidor' });
+        } else {
+            if(!courseDelete) {
+                res.status(404).send({ code: 404, message: 'Curso no encontrado' });
+            } else {
+                res.status(200).send({ code: 200, message: 'El curso ha sido eliminado correctamente' });
+            }
+        }
+    })
+}
+
 module.exports = {
     addCourse,
-    getCourse
+    getCourse,
+    deleteCourse
 }
